@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import mockRepo from './mockData/mockRepo';
 
 axios.defaults.baseURL = 'https://api.github.com';
 
@@ -7,7 +8,8 @@ const GithubContext = React.createContext();
 
 const GithubProvider = ({ children }) => {
 	const [githubUser, setGithubUser] = useState({});
-	const [repos, setRepos] = useState([]);
+	const [repos, setRepos] = useState(mockRepo);
+	const [readmeContent, setReadmeContent] = useState('');
 	const [followers, setFollowers] = useState([]);
 	//request loading
 	const [requests, setRequests] = useState(0);
@@ -61,13 +63,33 @@ const GithubProvider = ({ children }) => {
 			});
 	};
 
+	const getReadmeContent = async (repo) => {
+		// const response = await axios.get(
+		// 	`/repos/${githubUser.login}/${repo}/readme`
+		// );
+		const response = await axios.get(
+			`https://raw.githubusercontent.com/ryanhenry20/exam-ajaib-software-engineer/main/README.md`
+		);
+		setReadmeContent(response.data);
+		console.log('readme Content', response);
+		return response;
+	};
+	useEffect(() => getReadmeContent());
+
 	//add empty dependency array hence,
 	// useEffect will run only once after the rendering of the page.
 	// It will not re-run
 	useEffect(() => getRemainingRequests());
 	return (
 		<GithubContext.Provider
-			value={{ githubUser, repos, followers, requests, searchGithubUser }}
+			value={{
+				githubUser,
+				repos,
+				followers,
+				requests,
+				searchGithubUser,
+				readmeContent,
+			}}
 		>
 			{children}
 		</GithubContext.Provider>

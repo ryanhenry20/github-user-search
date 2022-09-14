@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Navbar = () => {
+const Navbar = ({ title = 'Dashboard' }) => {
 	return (
 		<Wrapper>
-			<h3>Welcome</h3>
+			<h3>{title}</h3>
 		</Wrapper>
 	);
 };
