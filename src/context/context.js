@@ -8,7 +8,7 @@ const GithubContext = React.createContext();
 
 const GithubProvider = ({ children }) => {
 	const [githubUser, setGithubUser] = useState({});
-	const [repos, setRepos] = useState(mockRepo);
+	const [repos, setRepos] = useState([]);
 	const [readmeContent, setReadmeContent] = useState('');
 	const [followers, setFollowers] = useState([]);
 	//request loading
@@ -63,18 +63,19 @@ const GithubProvider = ({ children }) => {
 			});
 	};
 
-	const getReadmeContent = async (repo) => {
+	const getReadmeContent = async (name, repo) => {
 		// const response = await axios.get(
-		// 	`/repos/${githubUser.login}/${repo}/readme`
+		// 	`https://raw.githubusercontent.com/ryanhenry20/exam-ajaib-software-engineer/main/README.md`
 		// );
-		const response = await axios.get(
-			`https://raw.githubusercontent.com/ryanhenry20/exam-ajaib-software-engineer/main/README.md`
+		const responseRepos = await axios.get(
+			`https://api.github.com/repos/${name}/${repo}/readme`
 		);
+		console.log('responseRepos', responseRepos);
+		const response = await axios.get(responseRepos.data.download_url);
 		setReadmeContent(response.data);
 		console.log('readme Content', response);
 		return response;
 	};
-	useEffect(() => getReadmeContent());
 
 	//add empty dependency array hence,
 	// useEffect will run only once after the rendering of the page.
@@ -88,6 +89,7 @@ const GithubProvider = ({ children }) => {
 				followers,
 				requests,
 				searchGithubUser,
+				getReadmeContent,
 				readmeContent,
 			}}
 		>

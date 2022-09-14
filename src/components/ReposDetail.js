@@ -1,22 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDom from 'react-dom';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { GithubContext } from '../context/context';
-import ReactMarkdown from 'react-markdown';
+import Markdown from 'react-markdown';
+import * as renderers from 'react-markdown-github-renderers';
 import remarkGfm from 'remark-gfm';
 
 const ReposDetail = () => {
-	const { readmeContent } = React.useContext(GithubContext);
+	const router = useRouter();
+	const { repo } = router.query;
+	const { readmeContent, getReadmeContent, githubUser } =
+		React.useContext(GithubContext);
+	console.log('repo', repo);
+	console.log('githubUser', githubUser);
+	useEffect(() => {
+		getReadmeContent(githubUser.login, repo);
+	}, [repo]);
+
 	console.log('readmeContent', readmeContent);
-	const markdown = `${readmeContent}`;
 	return (
 		<Wrapper>
 			<div className="markdown-container">
 				<h4>Readme.md</h4>
 				<div className="markdown-content">
-					<ReactMarkdown remarkPlugins={[remarkGfm]}>
+					<Markdown
+						// source={readmeContent}
+						escapeHtml={false}
+						renderers={renderers}
+						remarkPlugins={[remarkGfm]}
+					>
 						{readmeContent}
-					</ReactMarkdown>
+					</Markdown>
 				</div>
 			</div>
 		</Wrapper>
