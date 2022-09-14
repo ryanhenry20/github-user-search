@@ -21,11 +21,32 @@ const ReposDetail = () => {
 	console.log('readmeContent', readmeContent);
 	return (
 		<Wrapper>
+			<h3>{repo}</h3>
 			<div className="markdown-container">
 				<h4>Readme.md</h4>
 				<div className="markdown-content">
 					<Markdown
 						// source={readmeContent}
+						components={{
+							p: ({ node, children }) => {
+								if (node.children[0].tagName === 'img') {
+									console.log('node', node);
+									const image = node.children[0];
+									return (
+										<div className="image">
+											<img
+												src={`/images/${image.properties.src}`}
+												alt={image.properties.alt}
+												width="600"
+												height="300"
+											/>
+										</div>
+									);
+								}
+								// Return default child if it's not an image
+								return <p>{children}</p>;
+							},
+						}}
 						escapeHtml={false}
 						renderers={renderers}
 						remarkPlugins={[remarkGfm]}
