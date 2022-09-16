@@ -12,13 +12,11 @@ const ReposDetail = () => {
 	const { repo } = router.query;
 	const { readmeContent, getReadmeContent, githubUser } =
 		React.useContext(GithubContext);
-	console.log('repo', repo);
-	console.log('githubUser', githubUser);
+
 	useEffect(() => {
 		getReadmeContent(githubUser.login, repo);
 	}, [repo]);
 
-	console.log('readmeContent', readmeContent);
 	return (
 		<Wrapper>
 			<h3>{repo}</h3>
@@ -47,8 +45,6 @@ const ReposDetail = () => {
 								return <p>{children}</p>;
 							},
 						}}
-						escapeHtml={false}
-						renderers={renderers}
 						remarkPlugins={[remarkGfm]}
 					>
 						{readmeContent}
@@ -72,12 +68,12 @@ const Wrapper = styled.div`
 		border-radius: 10px;
 	}
 	.markdown-content {
-		padding: 16px;
+		padding: 36px;
 		/* overflow: scroll; */
 	}
 	h4 {
 		text-transform: none;
-		padding: 16px;
+		padding: 36px;
 		border-bottom: 1px solid var(--clr-grey-5);
 	}
 	/* @media (min-width: 992px) {

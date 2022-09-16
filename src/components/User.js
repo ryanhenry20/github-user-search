@@ -8,7 +8,6 @@ const User = () => {
 		<section className="section">
 			<Wrapper className="section-center">
 				<Card></Card>
-				{/* <Followers></Followers> */}
 				<Repos></Repos>
 			</Wrapper>
 		</section>

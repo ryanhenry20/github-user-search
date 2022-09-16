@@ -15,7 +15,7 @@ const Wrapper = styled.nav`
 	background: var(--clr-white);
 	text-align: center;
 	display: grid;
-	grid-template-columns: auto auto 100px;
+
 	justify-content: center;
 	align-items: center;
 	gap: 1.5rem;
