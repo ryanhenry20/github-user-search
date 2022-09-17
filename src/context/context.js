@@ -8,6 +8,7 @@ const GithubContext = React.createContext();
 const GithubProvider = ({ children }) => {
 	const [githubUser, setGithubUser] = useState({});
 	const [repos, setRepos] = useState([]);
+	const [readmeContent, setReadmeContent] = useState('');
 	const [followers, setFollowers] = useState([]);
 	//request loading
 	const [requests, setRequests] = useState(0);
@@ -17,10 +18,9 @@ const GithubProvider = ({ children }) => {
 			.get(`users/${user}`)
 			.catch((err) => console.log(err));
 
-		console.log(response);
 		if (response) {
 			setGithubUser(response.data);
-			console.log(response);
+
 			const { followers_url, login } = response.data;
 
 			await Promise.allSettled([
@@ -41,7 +41,6 @@ const GithubProvider = ({ children }) => {
 				.catch((err) => console.log(err));
 		} else {
 			getRemainingRequests();
-			console.log('no such user');
 		}
 	};
 	//nfn named function
@@ -51,7 +50,7 @@ const GithubProvider = ({ children }) => {
 			.then(({ data }) => {
 				let { remaining } = data.rate;
 				setRequests(remaining);
-				console.log('getRemainingRequests', remaining);
+
 				if (remaining == 0) {
 					//throw error
 				}
@@ -61,13 +60,30 @@ const GithubProvider = ({ children }) => {
 			});
 	};
 
+	const getReadmeContent = async (name, repo) => {
+		const responseRepos = await axios.get(
+			`https://api.github.com/repos/${name}/${repo}/readme`
+		);
+		const response = await axios.get(responseRepos.data.download_url);
+		setReadmeContent(response.data);
+		return response;
+	};
+
 	//add empty dependency array hence,
 	// useEffect will run only once after the rendering of the page.
 	// It will not re-run
 	useEffect(() => getRemainingRequests());
 	return (
 		<GithubContext.Provider
-			value={{ githubUser, repos, followers, requests, searchGithubUser }}
+			value={{
+				githubUser,
+				repos,
+				followers,
+				requests,
+				searchGithubUser,
+				getReadmeContent,
+				readmeContent,
+			}}
 		>
 			{children}
 		</GithubContext.Provider>

@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import Followers from './Followers';
+import Repos from './Repos';
 const User = () => {
 	return (
-		<section className='section'>
-			<Wrapper className='section-center'>
+		<section className="section">
+			<Wrapper className="section-center">
 				<Card></Card>
-				<Followers></Followers>
+				<Repos></Repos>
 			</Wrapper>
 		</section>
 	);

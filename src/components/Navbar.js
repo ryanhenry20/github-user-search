@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Navbar = () => {
+const Navbar = ({ title = 'Dashboard' }) => {
 	return (
 		<Wrapper>
-			<h3>Welcome</h3>
+			<h3>{title}</h3>
 		</Wrapper>
 	);
 };
@@ -15,7 +15,7 @@ const Wrapper = styled.nav`
 	background: var(--clr-white);
 	text-align: center;
 	display: grid;
-	grid-template-columns: auto auto 100px;
+
 	justify-content: center;
 	align-items: center;
 	gap: 1.5rem;
