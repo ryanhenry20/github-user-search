@@ -11,28 +11,27 @@ const Search = () => {
 		if (user) {
 			searchGithubUser(user);
 		}
-		console.log(user);
 	};
 
 	return (
-		<section className='section'>
-			<Wrapper className='section-center'>
+		<section className="section">
+			<Wrapper className="section-center">
 				<form onSubmit={handleSubmit}>
-					<div className='form-control'>
+					<div className="form-control">
 						<MdSearch></MdSearch>
 						<input
-							data-testid='search-bar'
-							type='text'
-							placeholder='enter github user name'
+							data-testid="search-bar"
+							type="text"
+							placeholder="enter github user name"
 							value={user}
 							onChange={(e) => {
 								setUser(e.target.value);
 							}}
 						></input>
-						<button type='submit'>search</button>
+						<button type="submit">search</button>
 					</div>
 				</form>
-				<h3 data-testid='rate-limit'>requests: {requests}/60</h3>
+				<h3 data-testid="rate-limit">requests: {requests}/60</h3>
 			</Wrapper>
 		</section>
 	);

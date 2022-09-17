@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GithubContext } from '../context/context';
 import Link from 'next/link';
 const Repos = () => {
-	const { repos } = React.useContext(GithubContext);
+	const { repos, githubUser } = React.useContext(GithubContext);
 	return (
 		<Wrapper>
 			<div className="repo">
@@ -14,7 +14,7 @@ const Repos = () => {
 						<article key={id}>
 							<div className="repo-info">
 								<h4>
-									<Link href={`/repo/${name}`}>{name}</Link>
+									<Link href={`/${githubUser.login}/${name}`}>{name}</Link>
 								</h4>
 								<div className="repo-icons"></div>
 							</div>

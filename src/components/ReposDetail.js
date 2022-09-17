@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react';
-import ReactDom from 'react-dom';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
-import { GithubContext } from '../context/context';
-import Markdown from 'react-markdown';
-import * as renderers from 'react-markdown-github-renderers';
+import _ from 'lodash';
+import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
+import styled from 'styled-components';
+import Markdown from 'react-markdown';
+import * as renderes from 'react-markdown-github-renderers';
+import { GithubContext } from '../context/context';
 
 const ReposDetail = () => {
 	const router = useRouter();
 	const { repo } = router.query;
-	const { readmeContent, getReadmeContent, githubUser } =
-		React.useContext(GithubContext);
+	const { user } = router.query;
+	const { readmeContent, getReadmeContent } = React.useContext(GithubContext);
 
 	useEffect(() => {
-		getReadmeContent(githubUser.login, repo);
-	}, [repo]);
+		getReadmeContent(user, repo);
+	}, [repo, user]);
 
 	return (
 		<Wrapper>
@@ -24,31 +25,11 @@ const ReposDetail = () => {
 				<h4>Readme.md</h4>
 				<div className="markdown-content">
 					<Markdown
-						// source={readmeContent}
-						components={{
-							p: ({ node, children }) => {
-								if (node.children[0].tagName === 'img') {
-									console.log('node', node);
-									const image = node.children[0];
-									return (
-										<div className="image">
-											<img
-												src={`/images/${image.properties.src}`}
-												alt={image.properties.alt}
-												width="600"
-												height="300"
-											/>
-										</div>
-									);
-								}
-								// Return default child if it's not an image
-								return <p>{children}</p>;
-							},
-						}}
+						children={readmeContent}
+						renderers={renderes}
 						remarkPlugins={[remarkGfm]}
-					>
-						{readmeContent}
-					</Markdown>
+						rehypePlugins={[rehypeRaw]}
+					/>
 				</div>
 			</div>
 		</Wrapper>
@@ -70,6 +51,11 @@ const Wrapper = styled.div`
 	.markdown-content {
 		padding: 36px;
 		/* overflow: scroll; */
+		img {
+			/* width: 10%; */
+			width: inherit;
+			display: inline-block;
+		}
 	}
 	h4 {
 		text-transform: none;

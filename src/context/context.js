@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import mockRepo from './mockData/mockRepo';
 
 axios.defaults.baseURL = 'https://api.github.com';
 
@@ -19,10 +18,9 @@ const GithubProvider = ({ children }) => {
 			.get(`users/${user}`)
 			.catch((err) => console.log(err));
 
-		console.log(response);
 		if (response) {
 			setGithubUser(response.data);
-			console.log(response);
+
 			const { followers_url, login } = response.data;
 
 			await Promise.allSettled([
@@ -43,7 +41,6 @@ const GithubProvider = ({ children }) => {
 				.catch((err) => console.log(err));
 		} else {
 			getRemainingRequests();
-			console.log('no such user');
 		}
 	};
 	//nfn named function
@@ -53,7 +50,7 @@ const GithubProvider = ({ children }) => {
 			.then(({ data }) => {
 				let { remaining } = data.rate;
 				setRequests(remaining);
-				console.log('getRemainingRequests', remaining);
+
 				if (remaining == 0) {
 					//throw error
 				}
@@ -64,16 +61,11 @@ const GithubProvider = ({ children }) => {
 	};
 
 	const getReadmeContent = async (name, repo) => {
-		// const response = await axios.get(
-		// 	`https://raw.githubusercontent.com/ryanhenry20/exam-ajaib-software-engineer/main/README.md`
-		// );
 		const responseRepos = await axios.get(
 			`https://api.github.com/repos/${name}/${repo}/readme`
 		);
-		console.log('responseRepos', responseRepos);
 		const response = await axios.get(responseRepos.data.download_url);
 		setReadmeContent(response.data);
-		console.log('readme Content', response);
 		return response;
 	};
 
